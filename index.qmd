@@ -10,7 +10,7 @@ date-format: long
 This project seeks to detect land cover changes in southern Minnesota. 
 Understanding the dynamics of environmental transformations caused by natural processes and human activities requires detecting land cover change. Accurate detection helps inform sustainable land-use policies and mitigate environmental impacts, such as biodiversity decline and climate change. Land cover change detection is a critical tool for understanding the complex dynamics of land use and its impacts on the environment, society, and economy. As human activities, such as urban expansion, agricultural intensification, and deforestation, continue to alter the landscape, it becomes increasingly important to monitor and assess these changes over time. studying land cover changes is vital for understanding environmental, social, and economic systems. It informs policies, promotes sustainable development, enhances disaster resilience, and helps manage natural resources more effectively.This study attempt to answer the principal questions:
 -What are the land cover change patterns that have occurred in Southern Minnesota from 2000 to 2020?
--What factors are causing these chanhes if there has been any change detection?
+-What factors are causing these changes if there has been any change detected?
 
 # Materials and methods
 The data source and data processing and analyzing method are noted in the code chunk in r. 
@@ -35,11 +35,12 @@ library(terra)
 library(tidyverse)
 library(RColorBrewer)
 ```
+
 ```{r}
 # load raster file
-landcover_path_2000 <- "/Users/oliviaadomabea/Documents/Spatial_Data_Analysis_Respo/case-studies-Oliviaado/Final Project/Minnesota/Annual_NLCD_H18V05_LndCov_2000_CU_C1V0.tif"
+landcover_path_2000 <- "Minnesota/Annual_NLCD_H18V05_LndCov_2000_CU_C1V0.tif"
 
-landcover_path_2020 <- "/Users/oliviaadomabea/Documents/Spatial_Data_Analysis_Respo/case-studies-Oliviaado/Final Project/Minnesota/Annual_NLCD_H18V05_LndCov_2020_CU_C1V0.tif"
+landcover_path_2020 <- "Minnesota/Annual_NLCD_H18V05_LndCov_2020_CU_C1V0.tif"
 
 landcover_2000 <- rast(landcover_path_2000)
 landcover_2020 <- rast(landcover_path_2020)
@@ -74,6 +75,7 @@ print(landcover_2000_pc)
 total_pixels <- sum(landcover_2000_pc$Pixel_Count_2000)
 landcover_2000_pc$Percentage_2000 <- (landcover_2000_pc$Pixel_Count_2000 / total_pixels) * 100
 ```
+
 ```{r}
 # for 2020
 # convert pixel counts to a df
@@ -84,6 +86,8 @@ print(landcover_2020_pc)
 # adding proportion to the df
 total_pixels <- sum(landcover_2020_pc$Pixel_Count_2020)
 landcover_2020_pc$Percentage_2020 <- (landcover_2020_pc$Pixel_Count_2020 / total_pixels) * 100
+```
+
 ```{r}
 library(tidyverse)
 lc_2000_2020 <- left_join(landcover_2000_pc, landcover_2020_pc, by = "Landcover_Class")
@@ -110,6 +114,7 @@ lc_2000_2020 <- lc_2000_2020[, c(2:6)]
 lc_2000_2020 <- lc_2000_2020 %>% group_by(land_cover_class) %>%
   summarise(across(everything(), sum, na.rm = TRUE))
 ```
+
 ```{r}
 # some exploratory data analysis
 # 1. group bar plot
@@ -140,14 +145,16 @@ tm_shape(landcover_2000) + tm_raster(title = "Landcover_Classes") +
   tm_layout(title = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2000", legend.outside = TRUE)
 
 ```
+
 ```{r}
-# plot(landcover_2020, col = palette, legend = TRUE,
-#      main = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2020")
+plot(landcover_2020, col = palette, legend = TRUE,
+main = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2020")
 
 library(tmap)
 tmap_mode("view")
 tm_shape(landcover_2020) + tm_raster(title = "Landcover_Classes") + 
   tm_layout(title = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2020", legend.outside = TRUE)
+```
 
 ```{r}
 # preprocessing for change detection
@@ -156,6 +163,7 @@ landcover_2020 <- resample(landcover_2020, landcover_2000, method = "near")
 # calculating change
 change <- landcover_2020 - landcover_2000
 ```
+
 ```{r}
 change[change == 0] <- NA
 custom_colors <- c("white", "green", "blue", "yellow", "red", "purple")
@@ -164,8 +172,11 @@ custom_colors <- c("white", "green", "blue", "yellow", "red", "purple")
 tmap_mode("view")
 tm_shape(change) + tm_raster(title = "Change") + tm_layout("Interactive Change Map")
 
-# plot(change, col = custom_colors[-1], legend = TRUE,
-#      main = "Landcover Changes (2000 - 2020)")
+plot(change, col = custom_colors[-1], legend = TRUE, main = "Landcover Changes (2000 - 2020)")
+
+
+```
+
 
 # Conclusions
 In conclusion, detecting land cover changes is essential for comprehensively understanding the impacts of human activities and natural processes on the environment. Through advanced remote sensing technologies and data analysis techniques like R, lannd cover changes are effectively monitor and quantify shifts in land cover over time, providing valuable insights into urbanization, deforestation, agricultural expansion, and climate change. This information is critical for informed decision-making, allowing for the development of sustainable land use policies and effective conservation strategies. As global challenges such as biodiversity loss, climate change, and resource depletion intensify, continuous monitoring and detection of land cover changes will be pivotal in ensuring a balance between human development and environmental preservation, ultimately fostering a more resilient and sustainable future for the planet.
@@ -175,3 +186,5 @@ From the analysis of the results, it was found that there has been a change dete
 # References
 
 All sources are cited in a consistent manner
+
+
