@@ -1,24 +1,34 @@
 ---
 title: "Land Cover Change Detection in Twin Cities Metro Area, Minnesota"
+format: pdf
+editor: visual
 author: Olivia Adomabea
 date: 12/02/2024
-output: html_document
-date-format: long
 ---
 
 # Introduction
-
-This project seeks to detect land cover changes in Twin Cities Metro Area(TCMA), Minnesota. Understanding the dynamics of environmental transformations caused by natural processes and human activities requires detecting land cover change. Accurate detection helps inform sustainable land-use policies and mitigate environmental impacts, such as biodiversity decline and climate change. Land cover change detection is a critical tool for understanding the complex dynamics of land use and its impacts on the environment, society, and economy. As human activities, such as urban expansion, agricultural intensification, and deforestation, continue to alter the landscape, it becomes increasingly important to monitor and assess these changes over time. studying land cover changes is vital for understanding environmental, social, and economic systems. It informs policies, promotes sustainable development, enhances disaster resilience, and helps manage natural resources more effectively.This study attempt to answer the principal questions: -What are the land cover change patterns that have occurred in TCMA, Minnesota from 2000 to 2020? -What factors are causing these changes if there has been any change detected?
+This project seeks to detect land cover changes in Twin Cities Metro Area(TCMA), Minnesota. 
+Understanding the dynamics of environmental transformations caused by natural processes and human activities requires detecting land cover change. Accurate detection helps inform sustainable land-use policies and mitigate environmental impacts, such as biodiversity decline and climate change. Land cover change detection is a critical tool for understanding the complex dynamics of land use and its impacts on the environment, society, and economy. As human activities, such as urban expansion, agricultural intensification, and deforestation, continue to alter the landscape, it becomes increasingly important to monitor and assess these changes over time. studying land cover changes is vital for understanding environmental, social, and economic systems. It informs policies, promotes sustainable development, enhances disaster resilience, and helps manage natural resources more effectively.This study attempt to answer the principal questions:
+-What are the land cover change patterns that have occurred in TCMA, Minnesota from 2000 to 2020?
+-What factors are causing these changes if there has been any change detected?
 
 # Materials and methods
-
-The data source and data processing and analyzing method are noted in the code chunk in r. Packages installed/loaded: -tidyverse -terra -RColorBrewer -tmap Data Source: -Landsat 8 (path 28. row 29) from USGS -copied path of downloaded data.
+The data source and data processing and analyzing method are noted in the code chunk in r. 
+Packages installed/loaded:
+-tidyverse
+-terra
+-RColorBrewer
+-tmap
+Data Source:
+-Landsat 8 (path 28. row 29) from USGS
+-copied path of downloaded data.
 
 Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
 
-## Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script.
+Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. 
+---
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # load packages
 # install.packages("terra")
 library(terra)
@@ -26,7 +36,7 @@ library(tidyverse)
 library(RColorBrewer)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # load raster file
 landcover_path_2000 <- "Minnesota/Annual_NLCD_H18V05_LndCov_2000_CU_C1V0.tif"
 
@@ -38,7 +48,7 @@ print(landcover_2000)
 print(landcover_2020)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # explore raster file
 landcover_cat_2000 <- unique(values(landcover_2000))
 landcover_cat_2020 <- unique(values(landcover_2020))
@@ -46,7 +56,7 @@ print(landcover_cat_2000)
 print(landcover_cat_2020)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # count pixels per landcover category
 landcover_2000_pc <- freq(landcover_2000, digits = 0)
 print(landcover_2000_pc)
@@ -54,7 +64,7 @@ landcover_2020_pc <- freq(landcover_2020, digits = 0)
 print(landcover_2020_pc)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # for 2000
 # convert pixel counts to a df
 landcover_2000_pc <- as.data.frame(landcover_2000_pc[, c(2,3)])
@@ -66,7 +76,7 @@ total_pixels <- sum(landcover_2000_pc$Pixel_Count_2000)
 landcover_2000_pc$Percentage_2000 <- (landcover_2000_pc$Pixel_Count_2000 / total_pixels) * 100
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # for 2020
 # convert pixel counts to a df
 landcover_2020_pc <- as.data.frame(landcover_2020_pc[, c(2,3)])
@@ -78,7 +88,7 @@ total_pixels <- sum(landcover_2020_pc$Pixel_Count_2020)
 landcover_2020_pc$Percentage_2020 <- (landcover_2020_pc$Pixel_Count_2020 / total_pixels) * 100
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 library(tidyverse)
 lc_2000_2020 <- left_join(landcover_2000_pc, landcover_2020_pc, by = "Landcover_Class")
 lc_2000_2020 <- lc_2000_2020 %>%
@@ -105,7 +115,7 @@ lc_2000_2020 <- lc_2000_2020 %>% group_by(land_cover_class) %>%
   summarise(across(everything(), sum, na.rm = TRUE))
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # some exploratory data analysis
 # 1. group bar plot
 data <- lc_2000_2020 %>% 
@@ -121,7 +131,7 @@ ggplot(data, aes(x = land_cover_class, y = Value, fill = Year)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # 2. visualizing the raster file spatially
 n_classes <- length(lc_2000_2020$land_cover_class)
 palette <- brewer.pal(n = n_classes, name = "Set3")
@@ -136,7 +146,7 @@ tm_shape(landcover_2000) + tm_raster(title = "Landcover_Classes") +
 
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 plot(landcover_2020, col = palette, legend = TRUE,
 main = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2020")
 
@@ -146,7 +156,7 @@ tm_shape(landcover_2020) + tm_raster(title = "Landcover_Classes") +
   tm_layout(title = "Spatial Distribution of Landcover Categories\n of Southwestern Minnesota in 2020", legend.outside = TRUE)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 # preprocessing for change detection
 landcover_2020 <- resample(landcover_2020, landcover_2000, method = "near")
 
@@ -154,7 +164,7 @@ landcover_2020 <- resample(landcover_2020, landcover_2000, method = "near")
 change <- landcover_2020 - landcover_2000
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 change[change == 0] <- NA
 custom_colors <- c("white", "green", "blue", "yellow", "red", "purple")
 
@@ -164,42 +174,41 @@ tm_shape(change) + tm_raster(title = "Change") + tm_layout("Interactive Change M
 
 plot(change, col = custom_colors[-1], legend = TRUE, main = "Landcover Changes (2000 - 2020)")
 
+
 ```
-
-```{r, message=FALSE, warning=FALSE}
-# leaflet map
-library(leaflet)
-library(tmap)
-library(raster)
-n_classes <- 5  # Set this to the correct number of classes in your raster
-palette_color <- brewer.pal(n = n_classes, name = "Set3")
-color_func <- colorFactor(palette = palette_color, levels = 1:n_classes)
-target <- raster::aggregate(landcover_2000, fact = 2, fun = modal, na.rm = TRUE)
-landcover_2000ds <- resample(landcover_2000, target, method = "near")
-landcover_2020ds <- resample(landcover_2020, target, method = "near")
-
-l <- leaflet() %>%
-  addTiles() %>%
-  addRasterImage(landcover_2000ds, opacity = 0.5, group = "Landcover 2000") %>%
-  addRasterImage(landcover_2020ds, opacity = 0.5, group = "Landcover 2020") %>%
-  addLayersControl(
-    overlayGroups = c("Landcover 2000", "Landcover 2020"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  setView(lng = -94, lat = 44, zoom = 7)
-widgetframe::frameWidget(l, width = "100%")
-```
-
-# Findings 
-
-From the analysis of the results, it was found that there has been a change detection in almost all the seven(7) landcovers. The developed area/built environment experienced a significant level of incremental changes. From 2000 to 2020, developed areas grew from 16.2% to 19.2% whereas there was a significant decrease in croplands from 29.2% to 26.9%. All the other landcovers(wetland, grasslands, and barren lands increased at 16.6%-16.7%, 14.1%-14.6,0.1%-0.2% respectively while open waters and forest decreased from 4.3%-4.1%, 18.7%-18.4% respectively. These findings indicate that vegetative covers are been lost to the built environment.
+#Findings
+From the analysis of the results, it was found that there has been a change detection in almost all the seven(7) landcovers. The developed area/built environment experienced a significant level of incremental changes. From 2000 to 2020, developed areas grew from 16.2% to 19.2% whereas there was a significant decrease in croplands from 29.2% to 26.9%. All the other landcovers(wetland, grasslands, and barren lands increased at 16.6%-16.7%, 14.1%-14.6,0.1%-0.2% respectively while open waters and forest decreased from 4.3%-4.1%, 18.7%-18.4% respectively. These findings indicate that vegetative covers are been lost to the built environment. 
 
 # Conclusions
-
 In conclusion, detecting land cover changes is essential for comprehensively understanding the impacts of human activities and natural processes on the environment. Through advanced remote sensing technologies and data analysis techniques like R, land cover changes are effectively monitor and quantify shifts in land cover over time, providing valuable insights into urbanization, deforestation, agricultural expansion, and climate change. This information is critical for informed decision-making, allowing for the development of sustainable land use policies and effective conservation strategies. As global challenges such as biodiversity loss, climate change, and resource depletion intensify, continuous monitoring and detection of land cover changes will be pivotal in ensuring a balance between human development and environmental preservation, ultimately fostering a more resilient and sustainable future for the planet.In future, I will want to study land surface temperature to investigate if loss of vegetative covers give rise to urban heat island.
 
-# References
 
-Yuan, Fei, Kali E Sawaya, Brian C Loeffelholz, and Marvin E Bauer. 2005. “Land Cover Classification and Change Analysis of the Twin Cities (Minnesota) Metropolitan Area by Multitemporal Landsat Remote Sensing.” Remote Sensing of Environment 98 (2): 317–28. https://doi.org/10.1016/j.rse.2005.08.006. Okeleye SO, Okhimamhe AA, Sanfo S, Fürst C. Impacts of Land Use and Land Cover Changes on Migration and Food Security of North Central Region, Nigeria. Land. 2023; 12(5):1012. https://doi.org/10.3390/land12051012 Choudhury U, Singh SK, Kumar A, Meraj G, Kumar P, Kanga S. Assessing Land Use/Land Cover Changes and Urban Heat Island Intensification: A Case Study of Kamrup Metropolitan District, Northeast India (2000–2032). Earth. 2023; 4(3):503-521. https://doi.org/10.3390/earth4030026
+# References
+Yuan, Fei, Kali E Sawaya, Brian C Loeffelholz, and Marvin E Bauer. 2005. “Land Cover Classification and Change Analysis of the Twin Cities (Minnesota) Metropolitan Area by Multitemporal Landsat Remote Sensing.” Remote Sensing of Environment 98 (2): 317–28. https://doi.org/10.1016/j.rse.2005.08.006.
+Okeleye SO, Okhimamhe AA, Sanfo S, Fürst C. Impacts of Land Use and Land Cover Changes on Migration and Food Security of North Central Region, Nigeria. Land. 2023; 12(5):1012. https://doi.org/10.3390/land12051012
+Choudhury U, Singh SK, Kumar A, Meraj G, Kumar P, Kanga S. Assessing Land Use/Land Cover Changes and Urban Heat Island Intensification: A Case Study of Kamrup Metropolitan District, Northeast India (2000–2032). Earth. 2023; 4(3):503-521. https://doi.org/10.3390/earth4030026
+
 
 All sources are cited in a consistent manner
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
