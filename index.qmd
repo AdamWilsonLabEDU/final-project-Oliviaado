@@ -1,7 +1,6 @@
 ---
 title: "Land Cover Change Detection in Twin Cities Metro Area, Minnesota"
 author: Olivia Adomabea
-subtitle: Subtitle here if desired
 date: 12/02/2024
 date-format: long
 ---
@@ -20,7 +19,7 @@ Packages installed/loaded:
 -RColorBrewer
 -tmap
 Data Source:
--Landsat 8 (path 28. row 29)
+-Landsat 8 (path 28. row 29) from USGS
 -copied path of downloaded data.
 
 Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
@@ -176,14 +175,18 @@ plot(change, col = custom_colors[-1], legend = TRUE, main = "Landcover Changes (
 
 
 ```
-
+#Findings
+From the analysis of the results, it was found that there has been a change detection in almost all the seven(7) landcovers. The developed area/built environment experienced a significant level of incremental changes. From 2000 to 2020, developed areas grew from 16.2% to 19.2% whereas there was a significant decrease in croplands from 29.2% to 26.9%. All the other landcovers(wetland, grasslands, and barren lands increased at 16.6%-16.7%, 14.1%-14.6,0.1%-0.2% respectively while open waters and forest decreased from 4.3%-4.1%, 18.7%-18.4% respectively. These findings indicate that vegetative covers are been lost to the built environment. 
 
 # Conclusions
-In conclusion, detecting land cover changes is essential for comprehensively understanding the impacts of human activities and natural processes on the environment. Through advanced remote sensing technologies and data analysis techniques like R, lannd cover changes are effectively monitor and quantify shifts in land cover over time, providing valuable insights into urbanization, deforestation, agricultural expansion, and climate change. This information is critical for informed decision-making, allowing for the development of sustainable land use policies and effective conservation strategies. As global challenges such as biodiversity loss, climate change, and resource depletion intensify, continuous monitoring and detection of land cover changes will be pivotal in ensuring a balance between human development and environmental preservation, ultimately fostering a more resilient and sustainable future for the planet.
+In conclusion, detecting land cover changes is essential for comprehensively understanding the impacts of human activities and natural processes on the environment. Through advanced remote sensing technologies and data analysis techniques like R, land cover changes are effectively monitor and quantify shifts in land cover over time, providing valuable insights into urbanization, deforestation, agricultural expansion, and climate change. This information is critical for informed decision-making, allowing for the development of sustainable land use policies and effective conservation strategies. As global challenges such as biodiversity loss, climate change, and resource depletion intensify, continuous monitoring and detection of land cover changes will be pivotal in ensuring a balance between human development and environmental preservation, ultimately fostering a more resilient and sustainable future for the planet.In future, I will want to study land surface temperature to investigate if loss of vegetative covers give rise to urban heat island.
 
-Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
-From the analysis of the results, it was found that there has been a change detection in almost all the seven(7) landcovers. The developed area/built environment experienced a significant level of incremental changes. From 2000 to 2020, developed areas grew from 16.2% to 19.2% whereas there was a significant decrease in croplands from 29.2% to 26.9%. All the other landcovers(wetland, grasslands, and barren lands increased at 16.6%-16.7%, 14.1%-14.6,0.1%-0.2% respectively while open waters and forest decreased from 4.3%-4.1%, 18.7%-18.4% respectively. These findings indicate that vegetative covers are been lost to the built environment. In future, I will want to study land surface temperature to investigate if loss of vegetative covers give rise to urban heat island.
+
 # References
+Yuan, Fei, Kali E Sawaya, Brian C Loeffelholz, and Marvin E Bauer. 2005. “Land Cover Classification and Change Analysis of the Twin Cities (Minnesota) Metropolitan Area by Multitemporal Landsat Remote Sensing.” Remote Sensing of Environment 98 (2): 317–28. https://doi.org/10.1016/j.rse.2005.08.006.
+Okeleye SO, Okhimamhe AA, Sanfo S, Fürst C. Impacts of Land Use and Land Cover Changes on Migration and Food Security of North Central Region, Nigeria. Land. 2023; 12(5):1012. https://doi.org/10.3390/land12051012
+Choudhury U, Singh SK, Kumar A, Meraj G, Kumar P, Kanga S. Assessing Land Use/Land Cover Changes and Urban Heat Island Intensification: A Case Study of Kamrup Metropolitan District, Northeast India (2000–2032). Earth. 2023; 4(3):503-521. https://doi.org/10.3390/earth4030026
+
 
 All sources are cited in a consistent manner
 
